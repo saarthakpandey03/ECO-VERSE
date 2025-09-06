@@ -12,7 +12,9 @@ import { Home, Menu } from "lucide-react";
 const Index = () => {
   const [currentSection, setCurrentSection] = useState("home");
   const [scrollY, setScrollY] = useState(0);
-  const [userCoins] = useState(850);
+  const [userCoins, setUserCoins] = useState(850);
+  const [userXP, setUserXP] = useState(2450);
+  const [userBadges, setUserBadges] = useState<string[]>(['tree', 'recycle']);
 
   // Calculate pollution level based on scroll (transforms as user scrolls)
   const pollutionLevel = Math.max(0, Math.min(1, 1 - scrollY / 1000));
@@ -31,6 +33,14 @@ const Index = () => {
 
   const handleGameStart = (gameId: number) => {
     console.log(`Starting game ${gameId}`);
+  };
+
+  const handleGameComplete = (gameId: number, score: number, badges: string[]) => {
+    setUserXP(prev => prev + score);
+    setUserCoins(prev => prev + Math.floor(score / 2));
+    setUserBadges(prev => [...new Set([...prev, ...badges])]);
+    
+    console.log(`Game ${gameId} completed! Score: ${score}, Badges: ${badges.join(', ')}`);
   };
 
   const handleRewardClaim = (rewardId: number) => {
@@ -87,7 +97,7 @@ const Index = () => {
       </section>
 
       {/* Sections */}
-      <div id="games"><GamesZone onGameStart={handleGameStart} /></div>
+      <div id="games"><GamesZone onGameStart={handleGameStart} onGameComplete={handleGameComplete} /></div>
       <div id="rewards"><RewardsZone userCoins={userCoins} onRewardClaim={handleRewardClaim} /></div>
       <div id="leaderboard"><LeaderboardZone /></div>
       <div id="dashboard"><DashboardZone /></div>

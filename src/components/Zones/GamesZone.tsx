@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Gamepad2, TreePine, Recycle, Zap, Trophy } from 'lucide-react';
+import { EcoGame } from '@/components/Games/EcoGame';
 
 const games = [
   {
@@ -44,9 +46,27 @@ const games = [
 
 interface GamesZoneProps {
   onGameStart: (gameId: number) => void;
+  onGameComplete: (gameId: number, score: number, badges: string[]) => void;
 }
 
-export const GamesZone = ({ onGameStart }: GamesZoneProps) => {
+export const GamesZone = ({ onGameStart, onGameComplete }: GamesZoneProps) => {
+  const [activeGame, setActiveGame] = useState<number | null>(null);
+
+  const handleGameStart = (gameId: number) => {
+    setActiveGame(gameId);
+    onGameStart(gameId);
+  };
+
+  const handleGameComplete = (score: number, badges: string[]) => {
+    if (activeGame) {
+      onGameComplete(activeGame, score, badges);
+      setActiveGame(null);
+    }
+  };
+
+  const handleGameClose = () => {
+    setActiveGame(null);
+  };
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
@@ -115,7 +135,7 @@ export const GamesZone = ({ onGameStart }: GamesZoneProps) => {
 
                   <Button
                     className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary-light hover:to-accent-light text-primary-foreground font-semibold"
-                    onClick={() => onGameStart(game.id)}
+                    onClick={() => handleGameStart(game.id)}
                   >
                     <Gamepad2 className="w-4 h-4 mr-2" />
                     Play Now
@@ -152,6 +172,15 @@ export const GamesZone = ({ onGameStart }: GamesZoneProps) => {
             </motion.div>
           ))}
         </div>
+
+        {/* Game Modal */}
+        {activeGame && (
+          <EcoGame
+            gameId={activeGame}
+            onGameComplete={handleGameComplete}
+            onClose={handleGameClose}
+          />
+        )}
       </div>
     </section>
   );
