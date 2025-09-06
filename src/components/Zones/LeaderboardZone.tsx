@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -84,6 +85,32 @@ const categories = [
 ];
 
 export const LeaderboardZone = () => {
+  const [activeCategory, setActiveCategory] = useState("Overall");
+  const [filteredData, setFilteredData] = useState(leaderboardData);
+
+  const handleCategoryChange = (categoryTitle: string) => {
+    setActiveCategory(categoryTitle);
+    
+    // Filter data based on category
+    let filtered = [...leaderboardData];
+    
+    switch (categoryTitle) {
+      case "Weekly":
+        filtered = filtered.filter(player => player.streak > 30).slice(0, 5);
+        break;
+      case "Friends":
+        filtered = filtered.filter(player => ["EcoChampion2024", "GreenThumb", "You"].includes(player.name));
+        break;
+      case "Local":
+        filtered = filtered.filter(player => ["🇬🇧", "🇺🇸"].includes(player.country));
+        break;
+      default:
+        break;
+    }
+    
+    setFilteredData(filtered);
+  };
+
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1: return <Crown className="w-6 h-6 text-yellow-400" />;
@@ -132,9 +159,10 @@ export const LeaderboardZone = () => {
               {categories.map((category, index) => (
                 <motion.button
                   key={category.title}
+                  onClick={() => handleCategoryChange(category.title)}
                   className={`
                     flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-300
-                    ${category.active 
+                    ${activeCategory === category.title
                       ? 'bg-primary text-primary-foreground glow-primary' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }
@@ -152,7 +180,7 @@ export const LeaderboardZone = () => {
 
         {/* Leaderboard */}
         <div className="space-y-4">
-          {leaderboardData.map((player, index) => (
+          {filteredData.map((player, index) => (
             <motion.div
               key={player.rank}
               initial={{ opacity: 0, x: -100 }}

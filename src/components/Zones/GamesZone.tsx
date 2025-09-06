@@ -4,43 +4,49 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Gamepad2, TreePine, Recycle, Zap, Trophy } from 'lucide-react';
 import { EcoGame } from '@/components/Games/EcoGame';
+import { ForestProtectorGame } from '@/components/Games/ForestProtectorGame';
+import { OceanCleanupGame } from '@/components/Games/OceanCleanupGame';
 
 const games = [
   {
     id: 1,
-    title: "Tree Planting Hero",
-    description: "Plant virtual trees and watch them grow in real-time!",
+    title: "Forest Protector",
+    description: "Plant trees and restore forest ecosystems in 3D!",
     icon: TreePine,
     difficulty: "Easy",
     xpReward: 50,
-    color: "from-primary to-primary-light"
+    color: "from-green-500 to-green-600",
+    component: "forest"
   },
   {
     id: 2,
-    title: "Recycling Master",
-    description: "Sort waste correctly and build recycling chains!",
+    title: "Ocean Cleanup",
+    description: "Clean plastic pollution and save marine life!",
     icon: Recycle,
     difficulty: "Medium",
     xpReward: 75,
-    color: "from-accent to-accent-light"
+    color: "from-blue-500 to-cyan-500",
+    component: "ocean"
   },
   {
     id: 3,
-    title: "Energy Saver",
-    description: "Optimize city energy usage and power renewable sources!",
+    title: "Eco Quiz Master",
+    description: "Test your environmental knowledge with MCQ challenges!",
     icon: Zap,
     difficulty: "Hard",
     xpReward: 100,
-    color: "from-yellow-400 to-orange-400"
+    color: "from-yellow-400 to-orange-400",
+    component: "quiz"
   },
   {
     id: 4,
-    title: "Eco Champions",
-    description: "Compete in weekly environmental challenges!",
+    title: "Climate Champion",
+    description: "Complete all eco-challenges and become a hero!",
     icon: Trophy,
     difficulty: "Expert",
     xpReward: 150,
-    color: "from-purple-400 to-pink-400"
+    color: "from-purple-400 to-pink-400",
+    component: "quiz"
   }
 ];
 
@@ -173,13 +179,31 @@ export const GamesZone = ({ onGameStart, onGameComplete }: GamesZoneProps) => {
           ))}
         </div>
 
-        {/* Game Modal */}
+        {/* Game Modals */}
         {activeGame && (
-          <EcoGame
-            gameId={activeGame}
-            onGameComplete={handleGameComplete}
-            onClose={handleGameClose}
-          />
+          <>
+            {games.find(g => g.id === activeGame)?.component === "forest" && (
+              <ForestProtectorGame
+                gameId={activeGame}
+                onGameComplete={handleGameComplete}
+                onClose={handleGameClose}
+              />
+            )}
+            {games.find(g => g.id === activeGame)?.component === "ocean" && (
+              <OceanCleanupGame
+                gameId={activeGame}
+                onGameComplete={handleGameComplete}
+                onClose={handleGameClose}
+              />
+            )}
+            {games.find(g => g.id === activeGame)?.component === "quiz" && (
+              <EcoGame
+                gameId={activeGame}
+                onGameComplete={handleGameComplete}
+                onClose={handleGameClose}
+              />
+            )}
+          </>
         )}
       </div>
     </section>

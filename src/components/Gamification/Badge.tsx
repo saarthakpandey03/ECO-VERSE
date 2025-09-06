@@ -13,7 +13,7 @@ const badgeIcons = {
   tree: TreePine,
   recycle: Recycle,
   energy: Zap,
-  water: Zap, // Changed to energy-looking icon
+  water: Droplets, // Fixed to use proper water icon
   award: Award
 };
 

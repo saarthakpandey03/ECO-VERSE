@@ -154,6 +154,15 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState(30);
+  const [showResults, setShowResults] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
+  const [answerHistory, setAnswerHistory] = useState<Array<{
+    question: string;
+    selectedAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+  }>>([]);
   const { toast } = useToast();
 
   const scenario = gameScenarios[currentScenario];
@@ -178,8 +187,25 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
     }
 
     const option = scenario.options[optionIndex] || { points: 0, correct: false };
+    const correctOption = scenario.options.find(opt => opt.correct);
     const newScore = Math.max(0, score + option.points);
     const newHealth = Math.max(0, Math.min(100, earthHealth + option.points));
+    
+    // Track answers for result sheet
+    const answerRecord = {
+      question: scenario.question,
+      selectedAnswer: optionIndex >= 0 ? scenario.options[optionIndex]?.text || "No answer" : "No answer",
+      correctAnswer: correctOption?.text || "Unknown",
+      isCorrect: optionIndex >= 0 ? (scenario.options[optionIndex]?.correct || false) : false
+    };
+    
+    setAnswerHistory(prev => [...prev, answerRecord]);
+    
+    if (option.correct) {
+      setCorrectAnswers(prev => prev + 1);
+    } else {
+      setWrongAnswers(prev => prev + 1);
+    }
     
     setScore(newScore);
     setEarthHealth(newHealth);
@@ -190,11 +216,11 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
     if (option.points >= 20 && !earnedBadges.includes('tree')) {
       setEarnedBadges(prev => [...prev, 'tree']);
     }
-    if (newHealth > 80 && !earnedBadges.includes('water')) {
-      setEarnedBadges(prev => [...prev, 'water']);
-    }
-    if (newScore > 100 && !earnedBadges.includes('energy')) {
+    if (newHealth > 80 && !earnedBadges.includes('energy')) {
       setEarnedBadges(prev => [...prev, 'energy']);
+    }
+    if (newScore > 100 && !earnedBadges.includes('recycle')) {
+      setEarnedBadges(prev => [...prev, 'recycle']);
     }
   };
 
@@ -205,17 +231,21 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
       setSelectedOption(null);
       setTimeLeft(30);
     } else {
-      // Game complete
-      const finalBadges = [...earnedBadges];
-      if (score > 120) finalBadges.push('award');
-      
-      onGameComplete(score, finalBadges);
-      
-      toast({
-        title: "Game Complete!",
-        description: `You scored ${score} points and earned ${finalBadges.length} badges!`,
-      });
+      // Show final results
+      setShowResults(true);
     }
+  };
+
+  const completeGame = () => {
+    const finalBadges = [...earnedBadges];
+    if (score > 120) finalBadges.push('award');
+    
+    onGameComplete(score, finalBadges);
+    
+    toast({
+      title: "Game Complete!",
+      description: `You scored ${score} points and earned ${finalBadges.length} badges!`,
+    });
   };
 
   if (!gameStarted) {
@@ -367,7 +397,7 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
                       onClick={nextScenario}
                       className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary-light hover:to-accent-light"
                     >
-                      {currentScenario < gameScenarios.length - 1 ? 'Next Mission' : 'Complete Game'}
+                      {currentScenario < gameScenarios.length - 1 ? 'Next Mission' : 'View Results'}
                     </Button>
                   </motion.div>
                 </AnimatePresence>
@@ -399,6 +429,86 @@ export const EcoGame = ({ gameId, onGameComplete, onClose }: EcoGameProps) => {
           )}
         </CardContent>
       </Card>
+
+      {/* Results Modal */}
+      {showResults && (
+        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="w-full max-w-3xl mx-4 bg-card/90 border-primary/30 max-h-[90vh] overflow-y-auto">
+            <CardHeader className="text-center">
+              <CardTitle className="text-3xl text-primary">🎯 Quiz Results</CardTitle>
+              <div className="flex justify-center space-x-8 mt-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400">{correctAnswers}</div>
+                  <div className="text-sm text-muted-foreground">Correct</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-400">{wrongAnswers}</div>
+                  <div className="text-sm text-muted-foreground">Incorrect</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">{score}</div>
+                  <div className="text-sm text-muted-foreground">Total Score</div>
+                </div>
+              </div>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <div className="text-center mb-6">
+                <div className="text-lg font-semibold">
+                  Score: {Math.round((correctAnswers / gameScenarios.length) * 100)}%
+                </div>
+                <Progress value={(correctAnswers / gameScenarios.length) * 100} className="mt-2" />
+              </div>
+
+              <h3 className="text-xl font-bold text-foreground mb-4">Answer Sheet:</h3>
+              <div className="space-y-4 max-h-64 overflow-y-auto">
+                {answerHistory.map((answer, index) => (
+                  <div key={index} className="p-4 bg-card/50 rounded-lg border">
+                    <div className="flex items-start space-x-3">
+                      {answer.isCorrect ? (
+                        <Check className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                      ) : (
+                        <X className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
+                      )}
+                      <div className="space-y-2 flex-1">
+                        <div className="font-semibold text-sm">Question {index + 1}: {answer.question}</div>
+                        <div className="text-sm">
+                          <span className="text-muted-foreground">Your answer: </span>
+                          <span className={answer.isCorrect ? 'text-green-400' : 'text-red-400'}>
+                            {answer.selectedAnswer}
+                          </span>
+                        </div>
+                        {!answer.isCorrect && (
+                          <div className="text-sm">
+                            <span className="text-muted-foreground">Correct answer: </span>
+                            <span className="text-green-400">{answer.correctAnswer}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex space-x-4 mt-6">
+                <Button
+                  onClick={completeGame}
+                  className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary-light hover:to-accent-light"
+                >
+                  Complete Game
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={onClose}
+                  className="flex-1"
+                >
+                  Close
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
