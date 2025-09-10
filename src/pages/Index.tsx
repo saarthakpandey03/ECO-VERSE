@@ -83,33 +83,8 @@ const Index = () => {
         </div>
       </motion.nav>
 
-      {/* Hero Section with 3D Earth */}
-      <section className="h-screen relative overflow-hidden" id="home">
-        <div className="absolute inset-0">
-          <Scene3D 
-            pollutionLevel={pollutionLevel}
-            onHotspotClick={handleHotspotClick}
-          />
-        </div>
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/50" />
-        
-        <motion.div 
-          className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          <h2 className="text-4xl md:text-6xl font-bold text-foreground text-glow mb-4">
-            Save Our Planet
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Click the hotspots to explore different zones!
-          </p>
-        </motion.div>
-      </section>
-
       {/* Sections */}
+      <div className="pt-20">{/* Add top padding for fixed nav */}</div>
       <div id="games"><GamesZone onGameStart={handleGameStart} onGameComplete={handleGameComplete} /></div>
       <div id="rewards"><RewardsZone userCoins={userCoins} onRewardClaim={handleRewardClaim} /></div>
       <div id="leaderboard"><LeaderboardZone /></div>
