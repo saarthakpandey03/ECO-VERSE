@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Scene3D } from "@/components/3D/Scene3D";
 import { GamesZone } from "@/components/Zones/GamesZone";
 import { RewardsZone } from "@/components/Zones/RewardsZone";
@@ -7,7 +8,7 @@ import { LeaderboardZone } from "@/components/Zones/LeaderboardZone";
 import { DashboardZone } from "@/components/Zones/DashboardZone";
 import { ImpactZone } from "@/components/Zones/ImpactZone";
 import { Button } from "@/components/ui/button";
-import { Home, Menu } from "lucide-react";
+import { Home, Menu, Gamepad2 } from "lucide-react";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState("home");
@@ -58,15 +59,27 @@ const Index = () => {
       >
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-primary text-glow">🌍 EcoVerse</h1>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setCurrentSection("home")}
-            className="text-primary hover:bg-primary/20"
-          >
-            <Home className="w-4 h-4 mr-2" />
-            Home
-          </Button>
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentSection("home")}
+              className="text-primary hover:bg-primary/20"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+            <Link to="/games">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-primary hover:bg-primary/20"
+              >
+                <Gamepad2 className="w-4 h-4 mr-2" />
+                Games Only
+              </Button>
+            </Link>
+          </div>
         </div>
       </motion.nav>
 
