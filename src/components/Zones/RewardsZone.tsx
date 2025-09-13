@@ -40,9 +40,9 @@ const rewards = [
 ];
 
 const badges = [
-  { type: 'tree' as const, level: 'gold' as const, unlocked: true, count: 15, title: "Forest Guardian" },
-  { type: 'recycle' as const, level: 'silver' as const, unlocked: true, count: 8, title: "Recycle Master" },
-  { type: 'energy' as const, level: 'bronze' as const, unlocked: true, count: 3, title: "Energy Saver" },
+  { type: 'tree' as const, level: 'bronze' as const, unlocked: true, count: 3, title: "Forest Guardian" },
+  { type: 'recycle' as const, level: 'silver' as const, unlocked: false, count: 0, title: "Recycle Master" },
+  { type: 'energy' as const, level: 'gold' as const, unlocked: false, count: 0, title: "Energy Saver" },
   { type: 'water' as const, level: 'platinum' as const, unlocked: false, count: 0, title: "Water Protector" },
 ];
 

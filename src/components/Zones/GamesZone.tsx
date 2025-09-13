@@ -135,6 +135,18 @@ export const GamesZone = ({}: GamesZoneProps) => {
           ))}
         </div>
 
+        {/* More Games Coming Soon */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="text-center mt-16 mb-8"
+        >
+          <p className="text-2xl font-bold text-muted-foreground/60 text-glow">
+            More games are coming soon . . .
+          </p>
+        </motion.div>
+
         {/* Floating eco elements */}
         <div className="relative mt-20 h-32 overflow-hidden">
           {Array.from({ length: 6 }).map((_, i) => (

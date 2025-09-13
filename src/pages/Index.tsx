@@ -8,7 +8,7 @@ import { LeaderboardZone } from "@/components/Zones/LeaderboardZone";
 import { DashboardZone } from "@/components/Zones/DashboardZone";
 import { ImpactZone } from "@/components/Zones/ImpactZone";
 import { Button } from "@/components/ui/button";
-import { Home, Menu, Gamepad2 } from "lucide-react";
+import { User, HelpCircle, Info } from "lucide-react";
 
 const Index = () => {
   const [currentSection, setCurrentSection] = useState("home");
@@ -51,22 +51,30 @@ const Index = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setCurrentSection("home")}
+              onClick={() => setCurrentSection("profile")}
               className="text-primary hover:bg-primary/20"
             >
-              <Home className="w-4 h-4 mr-2" />
-              Home
+              <User className="w-4 h-4 mr-2" />
+              Profile
             </Button>
-            <Link to="/games">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:bg-primary/20"
-              >
-                <Gamepad2 className="w-4 h-4 mr-2" />
-                Games Only
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentSection("support")}
+              className="text-primary hover:bg-primary/20"
+            >
+              <HelpCircle className="w-4 h-4 mr-2" />
+              Support
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentSection("about")}
+              className="text-primary hover:bg-primary/20"
+            >
+              <Info className="w-4 h-4 mr-2" />
+              About us
+            </Button>
           </div>
         </div>
       </motion.nav>
