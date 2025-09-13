@@ -87,12 +87,12 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/50" />
         
         <motion.div 
-          className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 text-center"
+          className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 text-center pt-8"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-foreground text-glow">
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground text-glow text-center">
             Save Our Planet
           </h2>
         </motion.div>
