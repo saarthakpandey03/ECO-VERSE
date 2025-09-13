@@ -95,7 +95,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/50" />
         
         <motion.div 
-          className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 text-center pt-8"
+          className="absolute bottom-1/4 left-1/2 transform -translate-x-1/2 text-center"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
