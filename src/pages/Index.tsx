@@ -100,7 +100,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-foreground text-glow text-center">
+          <h2 className="text-4xl md:text-6xl font-bold text-lovable-gradient text-heart-glow text-center">
             Save Our Planet
           </h2>
         </motion.div>

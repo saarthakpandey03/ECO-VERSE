@@ -130,6 +130,23 @@ All colors MUST be HSL.
     text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
   }
   
+  /* Lovable pastel gradient text */
+  .text-lovable-gradient {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 25%, #fecfef 50%, #a8e6cf 75%, #dcedc8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Soft heart glow aura */
+  .text-heart-glow {
+    text-shadow: 
+      0 0 15px rgba(255, 154, 158, 0.6),
+      0 0 30px rgba(254, 207, 239, 0.4),
+      0 0 45px rgba(168, 230, 207, 0.3),
+      0 0 60px rgba(255, 182, 193, 0.2);
+  }
+  
   /* Gamification elements */
   .xp-bar {
     @apply relative overflow-hidden bg-muted rounded-full;
