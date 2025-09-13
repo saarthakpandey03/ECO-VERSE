@@ -1,11 +1,7 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Gamepad2, TreePine, Recycle, Zap, Trophy } from 'lucide-react';
-import { EcoGame } from '@/components/Games/EcoGame';
-import { ForestProtectorGame } from '@/components/Games/ForestProtectorGame';
-import { OceanCleanupGame } from '@/components/Games/OceanCleanupGame';
 
 const games = [
   {
@@ -51,28 +47,10 @@ const games = [
 ];
 
 interface GamesZoneProps {
-  onGameStart: (gameId: number) => void;
-  onGameComplete: (gameId: number, score: number, badges: string[]) => void;
+  // Add your custom props here if needed
 }
 
-export const GamesZone = ({ onGameStart, onGameComplete }: GamesZoneProps) => {
-  const [activeGame, setActiveGame] = useState<number | null>(null);
-
-  const handleGameStart = (gameId: number) => {
-    setActiveGame(gameId);
-    onGameStart(gameId);
-  };
-
-  const handleGameComplete = (score: number, badges: string[]) => {
-    if (activeGame) {
-      onGameComplete(activeGame, score, badges);
-      setActiveGame(null);
-    }
-  };
-
-  const handleGameClose = () => {
-    setActiveGame(null);
-  };
+export const GamesZone = ({}: GamesZoneProps) => {
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
@@ -141,7 +119,12 @@ export const GamesZone = ({ onGameStart, onGameComplete }: GamesZoneProps) => {
 
                   <Button
                     className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary-light hover:to-accent-light text-primary-foreground font-semibold"
-                    onClick={() => handleGameStart(game.id)}
+                    onClick={() => {
+                      // TODO: Add your custom link/navigation here
+                      // Example: window.open('https://your-game-url.com', '_blank');
+                      // Or: navigate('/your-game-page');
+                      console.log(`Clicked game: ${game.title}`);
+                    }}
                   >
                     <Gamepad2 className="w-4 h-4 mr-2" />
                     Play Now
@@ -178,33 +161,6 @@ export const GamesZone = ({ onGameStart, onGameComplete }: GamesZoneProps) => {
             </motion.div>
           ))}
         </div>
-
-        {/* Game Modals */}
-        {activeGame && (
-          <>
-            {games.find(g => g.id === activeGame)?.component === "forest" && (
-              <ForestProtectorGame
-                gameId={activeGame}
-                onGameComplete={handleGameComplete}
-                onClose={handleGameClose}
-              />
-            )}
-            {games.find(g => g.id === activeGame)?.component === "ocean" && (
-              <OceanCleanupGame
-                gameId={activeGame}
-                onGameComplete={handleGameComplete}
-                onClose={handleGameClose}
-              />
-            )}
-            {games.find(g => g.id === activeGame)?.component === "quiz" && (
-              <EcoGame
-                gameId={activeGame}
-                onGameComplete={handleGameComplete}
-                onClose={handleGameClose}
-              />
-            )}
-          </>
-        )}
       </div>
     </section>
   );

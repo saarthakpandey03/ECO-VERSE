@@ -32,18 +32,6 @@ const Index = () => {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleGameStart = (gameId: number) => {
-    console.log(`Starting game ${gameId}`);
-  };
-
-  const handleGameComplete = (gameId: number, score: number, badges: string[]) => {
-    setUserXP(prev => prev + score);
-    setUserCoins(prev => prev + Math.floor(score / 2));
-    setUserBadges(prev => [...new Set([...prev, ...badges])]);
-    
-    console.log(`Game ${gameId} completed! Score: ${score}, Badges: ${badges.join(', ')}`);
-  };
-
   const handleRewardClaim = (rewardId: number) => {
     console.log(`Claiming reward ${rewardId}`);
   };
@@ -85,7 +73,7 @@ const Index = () => {
 
       {/* Sections */}
       <div className="pt-20">{/* Add top padding for fixed nav */}</div>
-      <div id="games"><GamesZone onGameStart={handleGameStart} onGameComplete={handleGameComplete} /></div>
+      <div id="games"><GamesZone /></div>
       
       {/* 3D Earth Section */}
       <section className="h-screen relative overflow-hidden" id="earth">
